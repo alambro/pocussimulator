@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>POCUS SIMULATOR Cardio Practice</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #bodyDiagram {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .body-region {
+      padding: 10px;
+      background-color: #eee;
+      border: 1px solid #999;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .highlight {
+      background-color: #cce5ff;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 14px;
+      margin: 5px;
+    }
+
+    img {
+      display: none;
+      max-width: 90%;
+      margin-top: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #orientationData p {
+      font-size: 18px;
+    }
+
+    #chest-container {
+      position: relative;
+      display: inline-block;
+      margin-top: 20px;
+      width: 200px;
+      height: 200px;
+    }
+
+    #chest-image {
+      width: 300px;
+      height: 200px;
+      border: 1px solid #aaa;
+    }
+
+    #probe {
+      position: absolute;
+      width: 20px;
+      height: 60px;
+      background-color: rgba(255, 0, 0, 0.6);
+      border: 2px solid red;
+      border-radius: 4px;
+      transform-origin: center;
+      border-top-color: skyblue;
+      border-top-width: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>POCUS SIMULATOR Cardio Practice</h1>
+
+  <div id="bodyDiagram">
+    <div class="body-region" id="leftOfSternum" onclick="moveProbeTo('leftOfSternum')">Left of Sternum</div>
+    <div class="body-region" id="thirdIntercostal">3rd Intercostal Space</div>
+    <div class="body-region" id="fifthIntercostal">5th Intercostal Space</div>
+    <div class="body-region" id="midClavicular">Mid-Clavicular Line</div>
+    <div class="body-region" id="midlineXiphoid" onclick="moveProbeTo('midlineXiphoid')">Midline Below Xiphoid</div>
+    <div class="body-region" id="rightOfMidline">Right of Midline Below Costal Margin</div>
+  </div>
+
+  <div id="chest-container">
+    <img id="chest-image" src="Chest.JPEG" alt="Chest"/>
+    <div id="probe"></div>
+  </div>
+
+  <br>
+  <button id="enableButton">Enable Orientation</button>
+  <button id="setNeutralButton">Set Neutral Orientation</button>
+
+  <div id="orientationData" style="display: none;">
+    <p>Alpha (Z): <span id="alpha">0</span></p>
+    <p>Beta (X): <span id="beta">0</span></p>
+    <p>Gamma (Y): <span id="gamma">0</span></p>
+  </div>
+
+  <img id="cardioImage1" src="Images/Cardio/Cardio_Parasternal_Long_Axis.png" />
+  <img id="cardioImage2" src="Images/Cardio/Cardio_Parasternal_Short_Axis.png" />
+  <img id="cardioImage3" src="Images/Cardio/Cardio_Apical 4 Chamber.png" />
+  <img id="cardioImage4" src="Images/Cardio/Cardio_Subcostal 4 Chamber.png" />
+  <img id="cardioImage5" src="Images/Cardio/Cardio_Subcostal Inferior Vena Cava.png" />
+
+  <script>
+    const selectedPosition = {
+      leftOfSternum: false,
+      thirdIntercostal: false,
+      fifthIntercostal: false,
+      midClavicular: false,
+      midlineXiphoid: false,
+      rightOfMidline: false
+    };
+
+    function toggleRegion(id, key) {
+      const region = document.getElementById(id);
+      region.addEventListener("click", () => {
+        selectedPosition[key] = !selectedPosition[key];
+        region.classList.toggle("highlight");
+      });
+    }
+
+    ["leftOfSternum", "thirdIntercostal", "fifthIntercostal", "midClavicular", "midlineXiphoid", "rightOfMidline"].forEach(id => toggleRegion(id, id));
+
+    const probe = document.getElementById("probe");
+    const positions = {
+      leftOfSternum: { x: 100, y: 100 },
+      midlineXiphoid: { x: 130, y: 230 }
+    };
+
+    function moveProbeTo(location) {
+      const pos = positions[location];
+      if (pos) {
+        probe.style.left = `${pos.x}px`;
+        probe.style.top = `${pos.y}px`;
+      }
+    }
+
+    let currentImageShown = null;
+    let lastOrientation = null;
+    let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
+
+    document.getElementById("setNeutralButton").addEventListener("click", () => {
+      if (lastOrientation) {
+        neutralOrientation = {
+          alpha: lastOrientation.alpha || 0,
+          beta: lastOrientation.beta || 0,
+          gamma: lastOrientation.gamma || 0
+        };
+        alert("Neutral orientation set.");
+      }
+    });
+
+    function handleOrientation(event) {
+      lastOrientation = event;
+
+      const rawAlpha = event.alpha || 0;
+      const rawBeta = event.beta || 0;
+      const rawGamma = event.gamma || 0;
+
+      const alpha = (rawAlpha - neutralOrientation.alpha + 360) % 360;
+      const beta = rawBeta - neutralOrientation.beta;
+      const gamma = rawGamma - neutralOrientation.gamma;
+
+      document.getElementById("alpha").textContent = alpha.toFixed(2);
+      document.getElementById("beta").textContent = beta.toFixed(2);
+      document.getElementById("gamma").textContent = gamma.toFixed(2);
+
+      // Rotate probe overlay
+      if (probe) {
+        probe.style.transform = `rotate(${beta}deg)`;
+      }
+
+      // Image logic
+      const images = ["cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"].map(id => document.getElementById(id));
+      images.forEach(img => img.style.display = "none");
+      let shown = null;
+
+      if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && gamma <= 0 && gamma >= -100) {
+        images[0].style.display = "block"; shown = "image1";
+      } else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && gamma >= 0 && gamma <= 100) {
+        images[1].style.display = "block"; shown = "image2";
+      } else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular gamma >= 0 && gamma <= 100) {
+        images[2].style.display = "block"; shown = "image3";
+      } else if (selectedPosition.midlineXiphoid && beta >= 75 && beta <= 100 && alpha >= 190 && alpha <= 220) {
+        images[3].style.display = "block"; shown = "image4";
+      } else if (selectedPosition.rightOfMidline && beta >= 75 && beta <= 100 && (alpha >= 350 || alpha <= 10)) {
+        images[4].style.display = "block"; shown = "image5";
+      }
+
+      if (shown && shown !== currentImageShown) {
+        if (navigator.vibrate) navigator.vibrate(200);
+        currentImageShown = shown;
+      } else if (!shown) {
+        currentImageShown = null;
+      }
+    }
+
+    function enableOrientationTracking() {
+      const dataDiv = document.getElementById("orientationData");
+      const enableButton = document.getElementById("enableButton");
+
+      if (
+        typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function'
+      ) {
+        DeviceOrientationEvent.requestPermission().then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+            dataDiv.style.display = 'block';
+            enableButton.style.display = 'none';
+          }
+        }).catch(console.error);
+      } else {
+        window.addEventListener('deviceorientation', handleOrientation);
+        dataDiv.style.display = 'block';
+        enableButton.style.display = 'none';
+      }
+    }
+
+    document.getElementById("enableButton").addEventListener("click", enableOrientationTracking);
+  </script>
+</body>
+</html>
