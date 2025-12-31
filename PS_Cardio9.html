@@ -51,30 +51,28 @@
     #chest-container {
       position: relative;
       display: inline-block;
-      margin-top: 20px;
-      width: 200px;
-      height: 200px;
+      margin: 20px;
     }
 
     #chest-image {
-      width: 300px;
-      height: 200px;
+      width: 1000px;
+      height: auto;
       border: 1px solid #aaa;
     }
 
     #probe {
       position: absolute;
-      width: 20px;
-      height: 60px;
-      background-color: rgba(255, 0, 0, 0.6);
-      border: 2px solid red;
+      width: 60px;
+      height: 20px;
+      background-color: rgba(0, 120, 255, 0.6);
+      border: 2px solid #0044cc;
       border-radius: 4px;
       transform-origin: center;
-      border-top-color: skyblue;
-      border-top-width: 10px;
+      transition: all 0.3s ease;
     }
   </style>
 </head>
+
 <body>
   <h1>POCUS SIMULATOR Cardio Practice</h1>
 
@@ -87,14 +85,14 @@
     <div class="body-region" id="rightOfMidline">Right of Midline Below Costal Margin</div>
   </div>
 
+  <!-- Chest image and probe -->
   <div id="chest-container">
-    <img id="chest-image" src="Chest.JPEG" alt="Chest"/>
+    <img id="chest-image" src="Images/Cardio/Cardio_Parasternal_Long_Axis.png"alt="Chest"/>
     <div id="probe"></div>
   </div>
 
-  <br>
   <button id="enableButton">Enable Orientation</button>
-  <button id="setNeutralButton">Set Neutral Orientation</button>
+<button id="setNeutralButton">Set Neutral Orientation</button>
 
   <div id="orientationData" style="display: none;">
     <p>Alpha (Z): <span id="alpha">0</span></p>
@@ -102,6 +100,7 @@
     <p>Gamma (Y): <span id="gamma">0</span></p>
   </div>
 
+  <!-- Sample ultrasound images -->
   <img id="cardioImage1" src="Images/Cardio/Cardio_Parasternal_Long_Axis.png" />
   <img id="cardioImage2" src="Images/Cardio/Cardio_Parasternal_Short_Axis.png" />
   <img id="cardioImage3" src="Images/Cardio/Cardio_Apical 4 Chamber.png" />
@@ -109,6 +108,37 @@
   <img id="cardioImage5" src="Images/Cardio/Cardio_Subcostal Inferior Vena Cava.png" />
 
   <script>
+    let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
+let lastOrientation = null;
+
+document.getElementById("setNeutralButton").addEventListener("click", () => {
+  if (lastOrientation) {
+    neutralOrientation.alpha = lastOrientation.alpha || 0;
+    neutralOrientation.beta = lastOrientation.beta || 0;
+    neutralOrientation.gamma = lastOrientation.gamma || 0;
+    alert("Neutral orientation set!");
+  }
+});
+
+function handleOrientation(event) {
+  lastOrientation = event;
+
+  // Subtract neutral offset to get relative orientation
+  const alpha = (event.alpha || 0) - neutralOrientation.alpha;
+  const beta = (event.beta || 0) - neutralOrientation.beta;
+  const gamma = (event.gamma || 0) - neutralOrientation.gamma;
+
+  // Display
+  document.getElementById("alpha").textContent = alpha.toFixed(2);
+  document.getElementById("beta").textContent = beta.toFixed(2);
+  document.getElementById("gamma").textContent = gamma.toFixed(2);
+
+  // Use relative alpha/beta/gamma below to trigger images, rotate probe, etc.
+}
+
+window.addEventListener('deviceorientation', handleOrientation);
+
+
     const selectedPosition = {
       leftOfSternum: false,
       thirdIntercostal: false,
@@ -126,12 +156,15 @@
       });
     }
 
-    ["leftOfSternum", "thirdIntercostal", "fifthIntercostal", "midClavicular", "midlineXiphoid", "rightOfMidline"].forEach(id => toggleRegion(id, id));
+    ["leftOfSternum", "thirdIntercostal", "fifthIntercostal", "midClavicular", "midlineXiphoid", "rightOfMidline"]
+      .forEach(id => toggleRegion(id, id));
 
     const probe = document.getElementById("probe");
+
     const positions = {
-      leftOfSternum: { x: 100, y: 100 },
+      leftOfSternum: { x: 100, y: 80 },
       midlineXiphoid: { x: 130, y: 230 }
+      // Add more positions as needed
     };
 
     function moveProbeTo(location) {
@@ -142,51 +175,30 @@
       }
     }
 
-    let currentImageShown = null;
-    let lastOrientation = null;
-    let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
-
-    document.getElementById("setNeutralButton").addEventListener("click", () => {
-      if (lastOrientation) {
-        neutralOrientation = {
-          alpha: lastOrientation.alpha || 0,
-          beta: lastOrientation.beta || 0,
-          gamma: lastOrientation.gamma || 0
-        };
-        alert("Neutral orientation set.");
-      }
-    });
-
     function handleOrientation(event) {
-      lastOrientation = event;
-
-      const rawAlpha = event.alpha || 0;
-      const rawBeta = event.beta || 0;
-      const rawGamma = event.gamma || 0;
-
-      const alpha = (rawAlpha - neutralOrientation.alpha + 360) % 360;
-      const beta = rawBeta - neutralOrientation.beta;
-      const gamma = rawGamma - neutralOrientation.gamma;
+      const alpha = event.alpha;
+      const beta = event.beta;
+      const gamma = event.gamma;
 
       document.getElementById("alpha").textContent = alpha.toFixed(2);
       document.getElementById("beta").textContent = beta.toFixed(2);
       document.getElementById("gamma").textContent = gamma.toFixed(2);
 
-      // Rotate probe overlay
-      if (probe) {
-        probe.style.transform = `rotate(${beta}deg)`;
-      }
+      // Rotate the probe
+      probe.style.transform = `rotate(${beta}deg)`;
 
-      // Image logic
-      const images = ["cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"].map(id => document.getElementById(id));
+      const images = [
+        "cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"
+      ].map(id => document.getElementById(id));
       images.forEach(img => img.style.display = "none");
+
       let shown = null;
 
-      if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && gamma <= 0 && gamma >= -100) {
+      if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 300 && alpha <= 360) {
         images[0].style.display = "block"; shown = "image1";
-      } else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && gamma >= 0 && gamma <= 100) {
+      } else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 10 && alpha <= 45) {
         images[1].style.display = "block"; shown = "image2";
-      } else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular gamma >= 0 && gamma <= 100) {
+      } else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && beta >= 75 && beta <= 100 && alpha >= 50 && alpha <= 100) {
         images[2].style.display = "block"; shown = "image3";
       } else if (selectedPosition.midlineXiphoid && beta >= 75 && beta <= 100 && alpha >= 190 && alpha <= 220) {
         images[3].style.display = "block"; shown = "image4";
@@ -201,6 +213,8 @@
         currentImageShown = null;
       }
     }
+
+    let currentImageShown = null;
 
     function enableOrientationTracking() {
       const dataDiv = document.getElementById("orientationData");
