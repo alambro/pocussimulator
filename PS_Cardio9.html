@@ -60,16 +60,6 @@
       border: 1px solid #aaa;
     }
 
-    #probe {
-      position: absolute;
-      width: 60px;
-      height: 20px;
-      background-color: rgba(0, 120, 255, 0.6);
-      border: 2px solid #0044cc;
-      border-radius: 4px;
-      transform-origin: center;
-      transition: all 0.3s ease;
-    }
   </style>
 </head>
 
@@ -88,7 +78,6 @@
   <!-- Chest image and probe -->
   <div id="chest-container">
     <img id="chest-image" src="Images/Cardio/Cardio_Parasternal_Long_Axis.png"alt="Chest"/>
-    <div id="probe"></div>
   </div>
 
   <button id="enableButton">Enable Orientation</button>
@@ -159,21 +148,9 @@ window.addEventListener('deviceorientation', handleOrientation);
     ["leftOfSternum", "thirdIntercostal", "fifthIntercostal", "midClavicular", "midlineXiphoid", "rightOfMidline"]
       .forEach(id => toggleRegion(id, id));
 
-    const probe = document.getElementById("probe");
-
-    const positions = {
-      leftOfSternum: { x: 100, y: 80 },
-      midlineXiphoid: { x: 130, y: 230 }
-      // Add more positions as needed
     };
 
-    function moveProbeTo(location) {
-      const pos = positions[location];
-      if (pos) {
-        probe.style.left = `${pos.x}px`;
-        probe.style.top = `${pos.y}px`;
-      }
-    }
+    
 
     function handleOrientation(event) {
       const alpha = event.alpha;
@@ -183,9 +160,6 @@ window.addEventListener('deviceorientation', handleOrientation);
       document.getElementById("alpha").textContent = alpha.toFixed(2);
       document.getElementById("beta").textContent = beta.toFixed(2);
       document.getElementById("gamma").textContent = gamma.toFixed(2);
-
-      // Rotate the probe
-      probe.style.transform = `rotate(${beta}deg)`;
 
       const images = [
         "cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"
