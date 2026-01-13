@@ -156,7 +156,7 @@ function handleOrientation(event) {
 
   let shown = null;
 
-  if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 70 && smoothBeta <= 110 && smoothAlpha >= 300 && smoothAlpha <= 20) {
+  if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 70 && smoothBeta <= 110 && smoothAlpha >= 300 || smoothAlpha <= 20) {
     images[0].style.display = "block"; shown = "image1";
   } 
   else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 10 && alpha <= 45) {
