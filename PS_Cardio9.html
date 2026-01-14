@@ -86,6 +86,15 @@
     <p>Gamma (Y): <span id="gamma">0</span></p>
   </div>
 
+  <div id="viewLabel" style="
+  display:none;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 15px;
+  color: #0044cc;
+    ">
+  </div>
+
   <!-- Ultrasound images -->
   <img id="cardioImage1" src="Images/Cardio/Cardio_Parasternal_Long_Axis.png" />
   <img id="cardioImage2" src="Images/Cardio/Cardio_Parasternal_Short_Axis.png" />
@@ -148,6 +157,18 @@ function handleOrientation(event) {
   document.getElementById("beta").textContent = beta.toFixed(1);
   document.getElementById("gamma").textContent = gamma.toFixed(1);
 
+  const viewLabel = document.getElementById("viewLabel");
+
+  function showView(labelText) {
+  viewLabel.textContent = labelText;
+  viewLabel.style.display = "block";
+}
+
+  function hideView() {
+  viewLabel.style.display = "none";
+}
+
+
   const images = [
     "cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"
   ].map(id => document.getElementById(id));
@@ -157,19 +178,29 @@ function handleOrientation(event) {
   let shown = null;
 
   if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 70 && smoothBeta <= 110 && smoothAlpha >= 300 || smoothAlpha <= 20) {
-    images[0].style.display = "block"; shown = "cardioImage1";
+    images[0].style.display = "block"; 
+    shown = "image1" ;
+    showView("Parasternal Long Axis (PLAX)");
   } 
   else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 10 && smoothAlpha <= 45) {
-    images[1].style.display = "block"; shown = "cardioImage2";
+    images[1].style.display = "block"; 
+    shown = "image2";
+    showView("Parasternal Short Axis (PSAX)");
   } 
   else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 50 && smoothAlpha <= 100) {
-    images[2].style.display = "block"; shown = "cardioImage3";
+    images[2].style.display = "block"; 
+    shown = "image3";
+    showView("Apical 4 Chamber (A4C)");
   } 
   else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 190 && smoothAlpha <= 220) {
-    images[3].style.display = "block"; shown = "cardioImage4";
+    images[3].style.display = "block"; 
+    shown = "image4";
+    showView("Subcostal 4 Chamber (SC4C)");
   } 
   else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && (smoothAlpha >= 350 || smoothAlpha <= 10)) {
-    images[4].style.display = "block"; shown = "cardioImage5";
+    images[4].style.display = "block"; 
+    shown = "image5";
+    showView("IVC");
   }
 
   if (shown && shown !== currentImageShown) {
