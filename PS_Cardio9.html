@@ -209,6 +209,10 @@ function handleOrientation(event) {
   } else if (!shown) {
     currentImageShown = null;
   }
+  if (!shown) {
+  currentImageShown = null;
+  hideView();
+}
 }
 
 function enableOrientationTracking() {
