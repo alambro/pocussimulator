@@ -157,19 +157,19 @@ function handleOrientation(event) {
   let shown = null;
 
   if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 70 && smoothBeta <= 110 && smoothAlpha >= 300 || smoothAlpha <= 20) {
-    images[0].style.display = "block"; shown = "image1";
+    images[0].style.display = "block"; shown = "cardioImage1";
   } 
   else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 10 && smoothAlpha <= 45) {
-    images[1].style.display = "block"; shown = "image2";
+    images[1].style.display = "block"; shown = "cardioImage2";
   } 
   else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 50 && smoothAlpha <= 100) {
-    images[2].style.display = "block"; shown = "image3";
+    images[2].style.display = "block"; shown = "cardioImage3";
   } 
   else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 190 && smoothAlpha <= 220) {
-    images[3].style.display = "block"; shown = "image4";
+    images[3].style.display = "block"; shown = "cardioImage4";
   } 
   else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && (smoothAlpha >= 350 || smoothAlpha <= 10)) {
-    images[4].style.display = "block"; shown = "image5";
+    images[4].style.display = "block"; shown = "cardioImage5";
   }
 
   if (shown && shown !== currentImageShown) {
