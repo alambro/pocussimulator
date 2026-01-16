@@ -103,16 +103,20 @@
   <img id="cardioImage5" src="Images/Cardio/Cardio_Subcostal Inferior Vena Cava.png" />
 
 <script>
+  
 document.addEventListener("DOMContentLoaded", () => {
-
+  
 let viewLocked = false;
+let viewLockTimer = null;
+
 let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
 let lastOrientation = null;
+let currentImageShown = null;
 
 let smoothAlpha = 0;
 let smoothBeta = 0;
 let smoothGamma = 0;
-const smoothingFactor = 0.15;
+const smoothingFactor = 0.15; // lower = smoother (0.05–0.2 is ideal)
 
 const selectedPosition = {
   leftOfSternum: false,
@@ -122,29 +126,21 @@ const selectedPosition = {
   midlineXiphoid: false,
   rightOfMidline: false
 };
-
-const images = [
-  document.getElementById("cardioImage1"),
-  document.getElementById("cardioImage2"),
-  document.getElementById("cardioImage3"),
-  document.getElementById("cardioImage4"),
-  document.getElementById("cardioImage5")
-];
-
-const viewLabel = document.getElementById("viewLabel");
-
-function showView(imageElement, labelText) {
+  
+function showView(imageElement, viewName) {
   if (viewLocked) return;
 
   viewLocked = true;
 
+  // Hide all images
   images.forEach(img => img.style.display = "none");
 
+  // Show selected image
   imageElement.style.display = "block";
-  viewLabel.textContent = labelText;
-  viewLabel.style.display = "block";
+  currentImageShown = viewName;
 
-  setTimeout(() => {
+  // Release lock after 1 second
+  viewLockTimer = setTimeout(() => {
     viewLocked = false;
   }, 1000);
 }
@@ -160,6 +156,7 @@ function toggleRegion(id) {
 ["leftOfSternum", "thirdIntercostal", "fifthIntercostal", "midClavicular", "midlineXiphoid", "rightOfMidline"]
   .forEach(toggleRegion);
 
+// Set neutral orientation
 document.getElementById("setNeutralButton").addEventListener("click", () => {
   if (lastOrientation) {
     neutralOrientation.alpha = lastOrientation.alpha || 0;
@@ -175,7 +172,7 @@ function handleOrientation(event) {
   lastOrientation = event;
 
   const alpha = (event.alpha || 0) - neutralOrientation.alpha;
-  const beta  = (event.beta  || 0) - neutralOrientation.beta;
+  const beta = (event.beta || 0) - neutralOrientation.beta;
   const gamma = (event.gamma || 0) - neutralOrientation.gamma;
 
   smoothAlpha += (alpha - smoothAlpha) * smoothingFactor;
@@ -183,51 +180,96 @@ function handleOrientation(event) {
   smoothGamma += (gamma - smoothGamma) * smoothingFactor;
 
   document.getElementById("alpha").textContent = alpha.toFixed(1);
-  document.getElementById("beta").textContent  = beta.toFixed(1);
+  document.getElementById("beta").textContent = beta.toFixed(1);
   document.getElementById("gamma").textContent = gamma.toFixed(1);
+
+  const viewLabel = document.getElementById("viewLabel");
+
+  //function showView(labelText) {
+  //viewLabel.textContent = labelText;
+  //viewLabel.style.display = "block";
+}
+
+  function hideView() {
+  viewLabel.style.display = "none";
+}
+
+
+  const images = [
+    "cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"
+  ].map(id => document.getElementById(id));
+
+  images.forEach(img => img.style.display = "none");
+
+  let shown = null;
 
   if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal &&
       smoothBeta >= 70 && smoothBeta <= 110 &&
-      (smoothAlpha >= 300 || smoothAlpha <= 20)) {
-
-    showView(images[0], "Parasternal Long Axis (PLAX)");
-  }
-
-  else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal &&
-           smoothBeta >= 75 && smoothBeta <= 100 &&
-           (smoothAlpha >= 10 && smoothAlpha <= 45)) {
-
-    showView(images[1], "Parasternal Short Axis (PSAX)");
-  }
-
-  else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular &&
-           smoothBeta >= 75 && smoothBeta <= 110) {
-
-    showView(images[2], "Apical 4 Chamber (A4C)");
-  }
-
-  else if (selectedPosition.midlineXiphoid &&
-           smoothBeta >= 75 && smoothBeta <= 100 &&
-           (smoothAlpha >= 190 && smoothAlpha <= 220)) {
-
-    showView(images[3], "Subcostal 4 Chamber (SC4C)");
-  }
-
-  else if (selectedPosition.rightOfMidline &&
-           smoothBeta >= 75 && smoothBeta <= 100 &&
+      (smoothAlpha >= 300 || smoothAlpha <= 20)
+      )
+  {
+    //images[0].style.display = "block"; 
+    //shown = "image1" ;
+    showView(images[0], "PLAX");
+    //showView("Parasternal Long Axis (PLAX)");
+  } 
+  else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && 
+           smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 10 && smoothAlpha <= 45) 
+  )
+  {
+    //images[1].style.display = "block"; 
+    //shown = "image2";
+    showView(images[0], "PSAX");
+    //showView("Parasternal Short Axis (PSAX)");
+  } 
+  else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && 
+           smoothBeta >= 75 && smoothBeta <= 110 && 
+           (smoothAlpha >= 40 && smoothAlpha <= 360) 
+  )
+  {
+    //images[2].style.display = "block"; 
+    //shown = "image3";
+    showView(images[0], "A4C");
+    //showView("Apical 4 Chamber (A4C)");
+  } 
+  else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 190 && smoothAlpha <= 220) 
+  )
+  {
+    //images[3].style.display = "block"; 
+    //shown = "image4";
+    showView(images[0], "SC4C");
+    //showView("Subcostal 4 Chamber (SC4C)");
+  } 
+  else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && 
            (smoothAlpha >= 350 || smoothAlpha <= 10)) {
-
-    showView(images[4], "IVC");
+    //images[4].style.display = "block"; 
+    //shown = "image5";
+    showView(images[0], "IVC");
+    //showView("IVC");
   }
+
+  if (shown && shown !== currentImageShown) {
+    if (navigator.vibrate) navigator.vibrate(200);
+    currentImageShown = shown;
+  } else if (!shown) {
+    currentImageShown = null;
+  }
+  if (!shown) {
+  currentImageShown = null;
+  hideView();
+}
 }
 
 function enableOrientationTracking() {
   const dataDiv = document.getElementById("orientationData");
   const enableButton = document.getElementById("enableButton");
 
-  if (typeof DeviceOrientationEvent !== 'undefined' &&
-      typeof DeviceOrientationEvent.requestPermission === 'function') {
-
+  if (
+    typeof DeviceOrientationEvent !== 'undefined' &&
+    typeof DeviceOrientationEvent.requestPermission === 'function'
+  ) {
     DeviceOrientationEvent.requestPermission().then(permissionState => {
       if (permissionState === 'granted') {
         window.addEventListener('deviceorientation', handleOrientation);
@@ -235,7 +277,6 @@ function enableOrientationTracking() {
         enableButton.style.display = 'none';
       }
     }).catch(console.error);
-
   } else {
     window.addEventListener('deviceorientation', handleOrientation);
     dataDiv.style.display = 'block';
@@ -243,12 +284,10 @@ function enableOrientationTracking() {
   }
 }
 
-document.getElementById("enableButton")
-  .addEventListener("click", enableOrientationTracking);
+document.getElementById("enableButton").addEventListener("click", enableOrientationTracking);
 
-});
+  });
 </script>
-
 
 </body>
 </html>
