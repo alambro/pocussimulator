@@ -1,3 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>POCUS SIMULATOR Cardio Practice</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #bodyDiagram {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .body-region {
+      padding: 10px;
+      background-color: #eee;
+      border: 1px solid #999;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .highlight {
+      background-color: #cce5ff;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 20px;
+      margin: 20px;
+    }
+
+    img {
+      display: none;
+      max-width: 90%;
+      margin-top: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #orientationData p {
+      font-size: 18px;
+    }
+
+    #chest-container {
+      position: relative;
+      display: inline-block;
+      margin: 20px;
+    }
+
+    #chest-image {
+      width: 1000px;
+      height: auto;
+      border: 1px solid #aaa;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>POCUS SIMULATOR Cardio Practice</h1>
+
+  <div id="bodyDiagram">
+    <div class="body-region" id="leftOfSternum">Left of Sternum</div>
+    <div class="body-region" id="thirdIntercostal">3rd Intercostal Space</div>
+    <div class="body-region" id="fifthIntercostal">5th Intercostal Space</div>
+    <div class="body-region" id="midClavicular">Mid-Clavicular Line</div>
+    <div class="body-region" id="midlineXiphoid">Midline Below Xiphoid</div>
+    <div class="body-region" id="rightOfMidline">Right of Midline Below Costal Margin</div>
+  </div>
+
+
+  <button id="enableButton">Enable Orientation</button>
+  <button id="setNeutralButton">Set Neutral Orientation</button>
+
+  <div id="orientationData" style="display:none;">
+    <p>Alpha (Z): <span id="alpha">0</span></p>
+    <p>Beta (X): <span id="beta">0</span></p>
+    <p>Gamma (Y): <span id="gamma">0</span></p>
+  </div>
+
+  <div id="viewLabel" style="
+  display:none;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 15px;
+  color: #0044cc;
+    ">
+  </div>
+
+  <!-- Ultrasound images -->
+  <img id="cardioImage1" src="Images/Cardio/Cardio_Parasternal_Long_Axis.png" />
+  <img id="cardioImage2" src="Images/Cardio/Cardio_Parasternal_Short_Axis.png" />
+  <img id="cardioImage3" src="Images/Cardio/Cardio_Apical 4 Chamber.png" />
+  <img id="cardioImage4" src="Images/Cardio/Cardio_Subcostal 4 Chamber.png" />
+  <img id="cardioImage5" src="Images/Cardio/Cardio_Subcostal Inferior Vena Cava.png" />
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -144,3 +248,7 @@ document.getElementById("enableButton")
 
 });
 </script>
+
+
+</body>
+</html>
