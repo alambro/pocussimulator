@@ -177,9 +177,15 @@ function handleOrientation(event) {
 
   let shown = null;
 
-  if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 70 && smoothBeta <= 110 && smoothAlpha >= 300 || smoothAlpha <= 20) {
+  if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal 
+      && smoothBeta >= 70 && smoothBeta <= 110 
+      && (smoothAlpha >= 300 || smoothAlpha <= 20) 
+      &&  Math.abs(smoothGamma) <= 25
+      )
+  {
     images[0].style.display = "block"; 
     shown = "image1" ;
+    showPLAX();
     showView("Parasternal Long Axis (PLAX)");
   } 
   else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 10 && smoothAlpha <= 45) {
