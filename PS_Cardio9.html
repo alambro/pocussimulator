@@ -183,84 +183,44 @@ function handleOrientation(event) {
   document.getElementById("beta").textContent = beta.toFixed(1);
   document.getElementById("gamma").textContent = gamma.toFixed(1);
 
-  const viewLabel = document.getElementById("viewLabel");
-
-  //function showView(labelText) {
-  //viewLabel.textContent = labelText;
-  //viewLabel.style.display = "block";
-//}
-
-  function hideView() {
-  viewLabel.style.display = "none";
-}
-
-
-  const images = [
-    "cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"
-  ].map(id => document.getElementById(id));
-
-  images.forEach(img => img.style.display = "none");
-
-  let shown = null;
+  // --- VIEW LOGIC ---
 
   if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal &&
       smoothBeta >= 70 && smoothBeta <= 110 &&
-      (smoothAlpha >= 300 || smoothAlpha <= 20)
-      )
-  {
-    //images[0].style.display = "block"; 
-    //shown = "image1" ;
-    showView(images[0], "PLAX");
-    //showView("Parasternal Long Axis (PLAX)");
-  } 
-  else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && 
-           smoothBeta >= 75 && smoothBeta <= 100 && 
-           (smoothAlpha >= 10 && smoothAlpha <= 45) 
-  )
-  {
-    //images[1].style.display = "block"; 
-    //shown = "image2";
-    showView(images[0], "PSAX");
-    //showView("Parasternal Short Axis (PSAX)");
-  } 
-  else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && 
-           smoothBeta >= 75 && smoothBeta <= 110 && 
-           (smoothAlpha >= 40 && smoothAlpha <= 360) 
-  )
-  {
-    //images[2].style.display = "block"; 
-    //shown = "image3";
-    showView(images[0], "A4C");
-    //showView("Apical 4 Chamber (A4C)");
-  } 
-  else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && 
-           (smoothAlpha >= 190 && smoothAlpha <= 220) 
-  )
-  {
-    //images[3].style.display = "block"; 
-    //shown = "image4";
-    showView(images[0], "SC4C");
-    //showView("Subcostal 4 Chamber (SC4C)");
-  } 
-  else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && 
-           (smoothAlpha >= 350 || smoothAlpha <= 10)) {
-    //images[4].style.display = "block"; 
-    //shown = "image5";
-    showView(images[0], "IVC");
-    //showView("IVC");
+      (smoothAlpha >= 300 || smoothAlpha <= 20)) {
+
+    showView(images[0], "Parasternal Long Axis (PLAX)");
   }
 
-  if (shown && shown !== currentImageShown) {
-    if (navigator.vibrate) navigator.vibrate(200);
-    currentImageShown = shown;
-  } else if (!shown) {
-    currentImageShown = null;
+  else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && 
+           smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 10 && smoothAlpha <= 45)) {
+
+    showView(images[1], "Parasternal Short Axis (PSAX)");
   }
-  if (!shown) {
-  currentImageShown = null;
-  hideView();
+
+  else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && 
+           smoothBeta >= 75 && smoothBeta <= 110 && 
+           (smoothAlpha >= 40 && smoothAlpha <= 360)) {
+
+    showView(images[2], "Apical 4 Chamber (A4C)");
+  }
+
+  else if (selectedPosition.midlineXiphoid && 
+           smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 190 && smoothAlpha <= 220)) {
+
+    showView(images[3], "Subcostal 4 Chamber (SC4C)");
+  }
+
+  else if (selectedPosition.rightOfMidline && 
+           smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 350 || smoothAlpha <= 10)) {
+
+    showView(images[4], "Inferior Vena Cava (IVC)");
+  }
 }
-}
+
 
 function enableOrientationTracking() {
   const dataDiv = document.getElementById("orientationData");
