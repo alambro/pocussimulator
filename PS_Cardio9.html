@@ -180,7 +180,6 @@ function handleOrientation(event) {
   if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal &&
       smoothBeta >= 70 && smoothBeta <= 110 &&
       (smoothAlpha >= 300 || smoothAlpha <= 20) &&
-      Math.abs(smoothGamma) <= 25
       )
   {
     images[0].style.display = "block"; 
