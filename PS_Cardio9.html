@@ -185,9 +185,9 @@ function handleOrientation(event) {
 
   const viewLabel = document.getElementById("viewLabel");
 
-  function showView(labelText) {
-  viewLabel.textContent = labelText;
-  viewLabel.style.display = "block";
+  //function showView(labelText) {
+  //viewLabel.textContent = labelText;
+  //viewLabel.style.display = "block";
 }
 
   function hideView() {
@@ -211,7 +211,7 @@ function handleOrientation(event) {
     //images[0].style.display = "block"; 
     //shown = "image1" ;
     showView(images[0], "PLAX");
-    showView("Parasternal Long Axis (PLAX)");
+    //showView("Parasternal Long Axis (PLAX)");
   } 
   else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && 
            smoothBeta >= 75 && smoothBeta <= 100 && 
@@ -221,7 +221,7 @@ function handleOrientation(event) {
     //images[1].style.display = "block"; 
     //shown = "image2";
     showView(images[0], "PSAX");
-    showView("Parasternal Short Axis (PSAX)");
+    //showView("Parasternal Short Axis (PSAX)");
   } 
   else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && 
            smoothBeta >= 75 && smoothBeta <= 110 && 
@@ -231,7 +231,7 @@ function handleOrientation(event) {
     //images[2].style.display = "block"; 
     //shown = "image3";
     showView(images[0], "A4C");
-    showView("Apical 4 Chamber (A4C)");
+    //showView("Apical 4 Chamber (A4C)");
   } 
   else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && 
            (smoothAlpha >= 190 && smoothAlpha <= 220) 
@@ -240,14 +240,14 @@ function handleOrientation(event) {
     //images[3].style.display = "block"; 
     //shown = "image4";
     showView(images[0], "SC4C");
-    showView("Subcostal 4 Chamber (SC4C)");
+    //showView("Subcostal 4 Chamber (SC4C)");
   } 
   else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && 
            (smoothAlpha >= 350 || smoothAlpha <= 10)) {
     //images[4].style.display = "block"; 
     //shown = "image5";
     showView(images[0], "IVC");
-    showView("IVC");
+    //showView("IVC");
   }
 
   if (shown && shown !== currentImageShown) {
