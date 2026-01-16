@@ -126,6 +126,14 @@ const selectedPosition = {
   midlineXiphoid: false,
   rightOfMidline: false
 };
+const images = [
+  document.getElementById("cardioImage1"),
+  document.getElementById("cardioImage2"),
+  document.getElementById("cardioImage3"),
+  document.getElementById("cardioImage4"),
+  document.getElementById("cardioImage5")
+];
+
   
 function showView(imageElement, viewName) {
   if (viewLocked) return;
@@ -133,7 +141,7 @@ function showView(imageElement, viewName) {
   viewLocked = true;
 
   // Hide all images
-  //images.forEach(img => img.style.display = "none");
+  images.forEach(img => img.style.display = "none");
 
   // Show selected image
   imageElement.style.display = "block";
