@@ -105,6 +105,9 @@
 <script>
   
 document.addEventListener("DOMContentLoaded", () => {
+  
+let viewLocked = false;
+let viewLockTimer = null;
 
 let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
 let lastOrientation = null;
@@ -123,6 +126,24 @@ const selectedPosition = {
   midlineXiphoid: false,
   rightOfMidline: false
 };
+  
+function showView(imageElement, viewName) {
+  if (viewLocked) return;
+
+  viewLocked = true;
+
+  // Hide all images
+  images.forEach(img => img.style.display = "none");
+
+  // Show selected image
+  imageElement.style.display = "block";
+  currentImageShown = viewName;
+
+  // Release lock after 1 second
+  viewLockTimer = setTimeout(() => {
+    viewLocked = false;
+  }, 1000);
+}
 
 function toggleRegion(id) {
   const region = document.getElementById(id);
@@ -146,6 +167,8 @@ document.getElementById("setNeutralButton").addEventListener("click", () => {
 });
 
 function handleOrientation(event) {
+  if (viewLocked) return;
+
   lastOrientation = event;
 
   const alpha = (event.alpha || 0) - neutralOrientation.alpha;
@@ -185,8 +208,9 @@ function handleOrientation(event) {
       (smoothAlpha >= 300 || smoothAlpha <= 20)
       )
   {
-    images[0].style.display = "block"; 
-    shown = "image1" ;
+    //images[0].style.display = "block"; 
+    //shown = "image1" ;
+    showView(images[0], "PLAX");
     showView("Parasternal Long Axis (PLAX)");
   } 
   else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && 
