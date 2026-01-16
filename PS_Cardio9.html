@@ -186,22 +186,34 @@ function handleOrientation(event) {
     shown = "image1" ;
     showView("Parasternal Long Axis (PLAX)");
   } 
-  else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 10 && smoothAlpha <= 45) {
+  else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && 
+           smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 10 && smoothAlpha <= 45) 
+  )
+  {
     images[1].style.display = "block"; 
     shown = "image2";
     showView("Parasternal Short Axis (PSAX)");
   } 
-  else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 50 && smoothAlpha <= 100) {
+  else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && 
+           smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 50 && smoothAlpha <= 100) 
+  )
+  {
     images[2].style.display = "block"; 
     shown = "image3";
     showView("Apical 4 Chamber (A4C)");
   } 
-  else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 190 && smoothAlpha <= 220) {
+  else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 190 && smoothAlpha <= 220) 
+  )
+  {
     images[3].style.display = "block"; 
     shown = "image4";
     showView("Subcostal 4 Chamber (SC4C)");
   } 
-  else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && (smoothAlpha >= 350 || smoothAlpha <= 10)) {
+  else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && 
+           (smoothAlpha >= 350 || smoothAlpha <= 10)) {
     images[4].style.display = "block"; 
     shown = "image5";
     showView("IVC");
