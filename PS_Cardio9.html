@@ -159,10 +159,11 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedPosition[id] = !selectedPosition[id];
       region.classList.toggle("highlight");
     });
-  }
+ // }
 
   ["leftOfSternum", "thirdIntercostal", "fifthIntercostal", "midClavicular", "midlineXiphoid", "rightOfMidline"]
     .forEach(toggleRegion);
+  }
 
   function handleOrientation(event) {
     lastOrientation = event;
@@ -209,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dataDiv.style.display = 'block';
       enableButton.style.display = 'none';
     }
-  }
+ }
 
   document.getElementById("enableButton").addEventListener("click", enableOrientationTracking);
 
