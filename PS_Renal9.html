@@ -196,32 +196,32 @@ function handleOrientation(event) {
 
   if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 70 && smoothBeta <= 110 && smoothAlpha >= 300 || smoothAlpha <= 20) {
     images[0].style.display = "block"; 
-    shown = "image1" ;
+    shown = "Image1" ;
     showView("Right Kidney Long Axis");
   } 
   else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 10 && smoothAlpha <= 45) {
     images[1].style.display = "block"; 
-    shown = "image2";
+    shown = "Image2";
     showView("Right Kidney Short Axis");
   } 
   else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 50 && smoothAlpha <= 100) {
     images[2].style.display = "block"; 
-    shown = "image3";
+    shown = "Image3";
     showView("Left Kidney Short Axis");
   } 
   else if (selectedPosition.midlineXiphoid && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 190 && smoothAlpha <= 220) {
     images[3].style.display = "block"; 
-    shown = "image4";
+    shown = "Image4";
     showView("Left Kidney Long Axis");
   } 
   else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && (smoothAlpha >= 350 || smoothAlpha <= 10)) {
     images[4].style.display = "block"; 
-    shown = "image5";
+    shown = "Image5";
     showView("Bladder Long Axis");
   }
   else if (selectedPosition.rightOfMidline && smoothBeta >= 75 && smoothBeta <= 100 && (smoothAlpha >= 350 || smoothAlpha <= 10)) {
     images[4].style.display = "block"; 
-    shown = "image6";
+    shown = "Image6";
     showView("Bladder Short Axis");
   }
 
