@@ -157,7 +157,7 @@
         if (shown && shown !== currentImageShown) {
         if (navigator.vibrate) navigator.vibrate(200);
         currentImageShown = shown;
-        lockUntil = now + 500; // lock for 500ms
+        lockUntil = now + 1000; // lock for 500ms
       }
 
         if (!shown && now > lockUntil) {
