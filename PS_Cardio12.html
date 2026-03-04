@@ -97,7 +97,7 @@
   <img id="cardioImage5" src="Images/DCardio/Cardio_Subcostal Inferior Vena Cava.png" />
 
   <script>
-    
+    document.addEventListener("DOMContentLoaded", () => {   
     let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
     let lastOrientation = null;
 
@@ -219,6 +219,7 @@ window.addEventListener('deviceorientation', handleOrientation);
     }
 
     document.getElementById("enableButton").addEventListener("click", enableOrientationTracking);
+    }
   </script>
 </body>
 </html>
