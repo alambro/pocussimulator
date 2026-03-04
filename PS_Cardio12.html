@@ -110,23 +110,6 @@ document.getElementById("setNeutralButton").addEventListener("click", () => {
   }
 });
 
-function handleOrientation(event) {
-  lastOrientation = event;
-
-  // Subtract neutral offset to get relative orientation
-  const alpha = (event.alpha || 0) - neutralOrientation.alpha;
-  const beta = (event.beta || 0) - neutralOrientation.beta;
-  const gamma = (event.gamma || 0) - neutralOrientation.gamma;
-
-  // Display
-  document.getElementById("alpha").textContent = alpha.toFixed(2);
-  document.getElementById("beta").textContent = beta.toFixed(2);
-  document.getElementById("gamma").textContent = gamma.toFixed(2);
-
-  // Use relative alpha/beta/gamma below to trigger images, rotate probe, etc.
-}
-
-window.addEventListener('deviceorientation', handleOrientation);
 
 
     const selectedPosition = {
@@ -219,7 +202,7 @@ window.addEventListener('deviceorientation', handleOrientation);
     }
 
     document.getElementById("enableButton").addEventListener("click", enableOrientationTracking);
-    }
+    });
   </script>
 </body>
 </html>
