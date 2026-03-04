@@ -199,6 +199,16 @@
     neutralOrientation.gamma = lastOrientation.gamma || 0;
     alert("Neutral orientation set!");
   }
+      if (screen.orientation && screen.orientation.lock) {
+  screen.orientation.lock("portrait-primary")
+    .then(() => {
+      console.log("Locked to portrait");
+    })
+    .catch((error) => {
+      console.log("Lock failed: " + error);
+    });
+}
+
       
     });
   </script>
