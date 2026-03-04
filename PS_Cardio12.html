@@ -89,16 +89,17 @@
     <p>Gamma (Y): <span id="gamma">0</span></p>
   </div>
 
-  <!-- Sample ultrasound images -->
-  <img id="cardioImage1" src="Images/Cardio/Cardio_Parasternal_Long_Axis.png" />
-  <img id="cardioImage2" src="Images/Cardio/Cardio_Parasternal_Short_Axis.png" />
-  <img id="cardioImage3" src="Images/Cardio/Cardio_Apical 4 Chamber.png" />
-  <img id="cardioImage4" src="Images/Cardio/Cardio_Subcostal 4 Chamber.png" />
-  <img id="cardioImage5" src="Images/Cardio/Cardio_Subcostal Inferior Vena Cava.png" />
+  <!-- Ultrasound images -->
+  <img id="cardioImage1" src="Images/DCardio/Cardio_Parasternal_Long_Axis.png" />
+  <img id="cardioImage2" src="Images/DCardio/Cardio_Parasternal_Short_Axis.png" />
+  <img id="cardioImage3" src="Images/DCardio/Cardio_Apical 4 Chamber.png" />
+  <img id="cardioImage4" src="Images/DCardio/Cardio_Subcostal 4 Chamber.png" />
+  <img id="cardioImage5" src="Images/DCardio/Cardio_Subcostal Inferior Vena Cava.png" />
 
   <script>
+    
     let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
-let lastOrientation = null;
+    let lastOrientation = null;
 
 document.getElementById("setNeutralButton").addEventListener("click", () => {
   if (lastOrientation) {
