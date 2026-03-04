@@ -90,11 +90,11 @@
   </div>
 
   <!-- Ultrasound images -->
-  <img id="cardioImage1" src="Images/DCardio/Cardio_Parasternal_Long_Axis.png" />
-  <img id="cardioImage2" src="Images/DCardio/Cardio_Parasternal_Short_Axis.png" />
-  <img id="cardioImage3" src="Images/DCardio/Cardio_Apical 4 Chamber.png" />
-  <img id="cardioImage4" src="Images/DCardio/Cardio_Subcostal 4 Chamber.png" />
-  <img id="cardioImage5" src="Images/DCardio/Cardio_Subcostal Inferior Vena Cava.png" />
+  <img id="Image1" src="Images/DCardio/Cardio_Parasternal_Long_Axis.png" />
+  <img id="Image2" src="Images/DCardio/Cardio_Parasternal_Short_Axis.png" />
+  <img id="Image3" src="Images/DCardio/Cardio_Apical 4 Chamber.png" />
+  <img id="Image4" src="Images/DCardio/Cardio_Subcostal 4 Chamber.png" />
+  <img id="Image5" src="Images/DCardio/Cardio_Subcostal Inferior Vena Cava.png" />
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {   
@@ -143,7 +143,7 @@ document.getElementById("setNeutralButton").addEventListener("click", () => {
 
 
       const images = [
-        "cardioImage1", "cardioImage2", "cardioImage3", "cardioImage4", "cardioImage5"
+        "Image1", "Image2", "Image3", "Image4", "Image5"
       ].map(id => document.getElementById(id));
       if (Date.now() > lockUntil) {
       images.forEach(img => img.style.display = "none");
@@ -152,15 +152,15 @@ document.getElementById("setNeutralButton").addEventListener("click", () => {
       let shown = null;
 
       if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 300 && alpha <= 360) {
-        images[0].style.display = "block"; shown = "image1";
+        images[0].style.display = "block"; shown = "Image1";
       } else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 10 && alpha <= 45) {
-        images[1].style.display = "block"; shown = "image2";
+        images[1].style.display = "block"; shown = "Image2";
       } else if (selectedPosition.fifthIntercostal && selectedPosition.midClavicular && beta >= 75 && beta <= 100 && alpha >= 50 && alpha <= 100) {
-        images[2].style.display = "block"; shown = "image3";
+        images[2].style.display = "block"; shown = "Image3";
       } else if (selectedPosition.midlineXiphoid && beta >= 75 && beta <= 100 && alpha >= 190 && alpha <= 220) {
-        images[3].style.display = "block"; shown = "image4";
+        images[3].style.display = "block"; shown = "Image4";
       } else if (selectedPosition.rightOfMidline && beta >= 75 && beta <= 100 && (alpha >= 350 || alpha <= 10)) {
-        images[4].style.display = "block"; shown = "image5";
+        images[4].style.display = "block"; shown = "Image5";
       }
 
       const now = Date.now();
