@@ -100,14 +100,6 @@
     document.addEventListener("DOMContentLoaded", () => {   
     let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
     let lastOrientation = null;
-
-document.getElementById("setNeutralButton").addEventListener("click", () => {
-  if (lastOrientation) {
-    neutralOrientation.alpha = lastOrientation.alpha || 0;
-    neutralOrientation.beta = lastOrientation.beta || 0;
-    neutralOrientation.gamma = lastOrientation.gamma || 0;
-    alert("Neutral orientation set!");
-  }
 });
 
 
@@ -202,6 +194,15 @@ document.getElementById("setNeutralButton").addEventListener("click", () => {
     }
 
     document.getElementById("enableButton").addEventListener("click", enableOrientationTracking);
+
+    document.getElementById("setNeutralButton").addEventListener("click", () => {
+  if (lastOrientation) {
+    neutralOrientation.alpha = lastOrientation.alpha || 0;
+    neutralOrientation.beta = lastOrientation.beta || 0;
+    neutralOrientation.gamma = lastOrientation.gamma || 0;
+    alert("Neutral orientation set!");
+  }
+      
     });
   </script>
 </body>
