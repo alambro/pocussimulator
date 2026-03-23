@@ -196,7 +196,7 @@ function handleOrientation(event) {
     shown = "image1" ;
     showView("Thyroid_Longitudinal_view");
   } 
-  else if (selectedPosition.midLine && selectedPosition.belowThyroidCartilage && smoothBeta >= 75 && smoothBeta <= 100 && smoothAlpha >= 10 && smoothAlpha <= 45) {
+  else if (selectedPosition.midLine && selectedPosition.belowThyroidCartilage && smoothAlpha >= 0 && smoothAlpha <= 50) {
     images[1].style.display = "block"; 
     shown = "image2";
     showView("Thyroid_Transvers_Short_view");
