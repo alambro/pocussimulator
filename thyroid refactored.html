@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>POCUS SIMULATOR Thyroid Practice</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #bodyDiagram {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .body-region {
+      padding: 10px;
+      background-color: #eee;
+      border: 1px solid #999;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .highlight {
+      background-color: #cce5ff;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 20px;
+      margin: 20px;
+    }
+
+    img {
+      display: none;
+      max-width: 90%;
+      margin-top: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #orientationData p {
+      font-size: 18px;
+    }
+
+    #chest-container {
+      position: relative;
+      display: inline-block;
+      margin: 20px;
+    }
+
+    #chest-image {
+      width: 1000px;
+      height: auto;
+      border: 1px solid #aaa;
+      display: block;
+    }
+     footer {
+      margin-top: 80px;
+      padding: 25px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #e0e0e0;
+      text-align: center;
+}
+
+footer a {
+  color: #0066cc;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+  </style>
+</head>
+
+<body>
+  <h1>POCUS SIMULATOR Thyroid Practice</h1>
+
+  <div id="bodyDiagram">
+    <div class="body-region" id="midLine">Midline</div>
+    <div class="body-region" id="belowCricoid">Below Cricoid</div>
+    <div class="body-region" id="belowThyroidCartilage">Below Thyroid Cartilage</div>
+    <div class="body-region" id="eitherSideofMidline">Either Side of Midline</div>
+  </div>
+
+
+  <button id="enableButton">Enable Orientation</button>
+  <button id="setNeutralButton">Set Neutral Orientation</button>
+
+  <div id="orientationData" style="display:none;">
+    <p>Alpha (Z): <span id="alpha">0</span></p>
+    <p>Beta (X): <span id="beta">0</span></p>
+    <p>Gamma (Y): <span id="gamma">0</span></p>
+  </div>
+
+  <div id="viewLabel" style="
+  display:none;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 15px;
+  color: #0044cc;
+    ">
+  </div>
+
+  <!-- Ultrasound images -->
+  <img id="thyroidImage1" src="Images/MyThyroid/Transverse view.PNG" />
+  <img id="thyroidImage2" src="Images/MyThyroid/Longitudinal view.JPG" />
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ---------------- STATE ----------------
+  const state = {
+    neutral: { alpha: 0, beta: 0, gamma: 0 },
+    lastOrientation: null,
+    currentImage: null,
+    smooth: { alpha: 0, beta: 0, gamma: 0 },
+    smoothingFactor: 0.15,
+    selected: {
+      midLine: false,
+      belowCricoid: false,
+      belowThyroidCartilage: false,
+      eitherSideofMidline: false
+    }
+  };
+
+  // ---------------- REGION TOGGLING ----------------
+  function toggleRegion(id) {
+    const el = document.getElementById(id);
+    el.addEventListener("click", () => {
+      state.selected[id] = !state.selected[id];
+      el.classList.toggle("highlight");
+    });
+  }
+
+  ["midLine", "belowCricoid", "belowThyroidCartilage", "eitherSideofMidline"]
+    .forEach(toggleRegion);
+
+  // ---------------- BUTTONS ----------------
+  document.getElementById("setNeutralButton").addEventListener("click", () => {
+    if (state.lastOrientation) {
+      state.neutral = {
+        alpha: state.lastOrientation.alpha || 0,
+        beta: state.lastOrientation.beta || 0,
+        gamma: state.lastOrientation.gamma || 0
+      };
+      alert("Neutral orientation set!");
+    }
+  });
+
+  document.getElementById("enableButton").addEventListener("click", enableOrientationTracking);
+
+  // ---------------- ORIENTATION ----------------
+  function handleOrientation(event) {
+    state.lastOrientation = event;
+
+    const raw = {
+      alpha: (event.alpha || 0) - state.neutral.alpha,
+      beta: (event.beta || 0) - state.neutral.beta,
+      gamma: (event.gamma || 0) - state.neutral.gamma
+    };
+
+    // smoothing
+    state.smooth.alpha += (raw.alpha - state.smooth.alpha) * state.smoothingFactor;
+    state.smooth.beta  += (raw.beta  - state.smooth.beta)  * state.smoothingFactor;
+    state.smooth.gamma += (raw.gamma - state.smooth.gamma) * state.smoothingFactor;
+
+    updateUI(raw);
+    evaluateViews();
+  }
+
+  // ---------------- UI ----------------
+  function updateUI(raw) {
+    document.getElementById("alpha").textContent = raw.alpha.toFixed(1);
+    document.getElementById("beta").textContent = raw.beta.toFixed(1);
+    document.getElementById("gamma").textContent = raw.gamma.toFixed(1);
+  }
+
+  function showView(label) {
+    const el = document.getElementById("viewLabel");
+    el.textContent = label;
+    el.style.display = "block";
+  }
+
+  function hideView() {
+    document.getElementById("viewLabel").style.display = "none";
+  }
+
+  function hideAllImages() {
+    ["thyroidImage1", "thyroidImage2"]
+      .forEach(id => document.getElementById(id).style.display = "none");
+  }
+
+  // ---------------- CORE LOGIC ----------------
+  function evaluateViews() {
+    const { alpha, beta } = state.smooth;
+    const s = state.selected;
+
+    hideAllImages();
+
+    let shown = null;
+
+    // LONGITUDINAL VIEW
+    if (
+      s.midLine &&
+      s.belowCricoid &&
+      beta >= 70 && beta <= 110 &&
+      (alpha >= 300 || alpha <= 20)
+    ) {
+      document.getElementById("thyroidImage1").style.display = "block";
+      showView("Thyroid Longitudinal View");
+      shown = "long";
+    }
+
+    // TRANSVERSE VIEW
+    else if (
+      s.midLine &&
+      s.belowThyroidCartilage &&
+      alpha >= 0 && alpha <= 50
+    ) {
+      document.getElementById("thyroidImage2").style.display = "block";
+      showView("Thyroid Transverse View");
+      shown = "trans";
+    }
+
+    // vibration feedback
+    if (shown && shown !== state.currentImage) {
+      if (navigator.vibrate) navigator.vibrate(200);
+      state.currentImage = shown;
+    }
+
+    if (!shown) {
+      state.currentImage = null;
+      hideView();
+    }
+  }
+
+  // ---------------- ENABLE ORIENTATION ----------------
+  function enableOrientationTracking() {
+    const dataDiv = document.getElementById("orientationData");
+    const btn = document.getElementById("enableButton");
+
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      DeviceOrientationEvent.requestPermission()
+        .then(permission => {
+          if (permission === "granted") {
+            window.addEventListener("deviceorientation", handleOrientation);
+            dataDiv.style.display = "block";
+            btn.style.display = "none";
+          }
+        })
+        .catch(console.error);
+    } else {
+      window.addEventListener("deviceorientation", handleOrientation);
+      dataDiv.style.display = "block";
+      btn.style.display = "none";
+    }
+  }
+
+});
+</script>
