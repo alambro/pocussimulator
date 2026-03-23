@@ -213,8 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (
       s.midLine &&
       s.belowCricoid &&
-      beta >= 70 && beta <= 110 &&
-      (alpha >= 300 || alpha <= 20)
+      (alpha >= 200 || alpha <= 0)
     ) {
       document.getElementById("thyroidImage1").style.display = "block";
       showView("Thyroid Longitudinal View");
