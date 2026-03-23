@@ -129,12 +129,10 @@ let smoothGamma = 0;
 const smoothingFactor = 0.15; // lower = smoother (0.05–0.2 is ideal)
 
 const selectedPosition = {
-  leftOfSternum: false,
-  thirdIntercostal: false,
-  fifthIntercostal: false,
-  midClavicular: false,
-  midlineXiphoid: false,
-  rightOfMidline: false
+  midLine: false,
+  belowCricoid: false,
+  belowThyroidCartilage: false,
+  eitherSideofMidline: false
 };
 
 
@@ -146,7 +144,7 @@ function toggleRegion(id) {
   });
 }
 
-["midLine", "belowCricoid", "belowThyroidCartilage", "eitherSideofMidline"
+["midLine", "belowCricoid", "belowThyroidCartilage", "eitherSideofMidline"]
   .forEach(toggleRegion);
 
 // Set neutral orientation
