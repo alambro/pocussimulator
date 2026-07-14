@@ -81,9 +81,9 @@
 <button id="setNeutralButton">Set Neutral Orientation</button>
 
   <div id="orientationData" style="display: none;">
-    <p>Alpha (Z): <span id="alpha">0</span></p>
+    //<p>Alpha (Z): <span id="alpha">0</span></p>
     <p>Beta (X): <span id="beta">0</span></p>
-    <p>Gamma (Y): <span id="gamma">0</span></p>
+    //<p>Gamma (Y): <span id="gamma">0</span></p>
   </div>
 
   <!-- Ultrasound images -->
@@ -95,7 +95,8 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {   
-    let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
+      let neutralOrientation = { beta: 0};
+    //let neutralOrientation = { alpha: 0, beta: 0, gamma: 0 };
     let lastOrientation = null;
 });
 
@@ -126,9 +127,9 @@
       const beta = event.beta;
       const gamma = event.gamma;
 
-      document.getElementById("alpha").textContent = alpha.toFixed(2);
+      //document.getElementById("alpha").textContent = alpha.toFixed(2);
       document.getElementById("beta").textContent = beta.toFixed(2);
-      document.getElementById("gamma").textContent = gamma.toFixed(2);
+      //document.getElementById("gamma").textContent = gamma.toFixed(2);
 
 
       const images = [
@@ -139,8 +140,8 @@
       }
 
       let shown = null;
-
-      if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 300 && alpha <= 360) {
+         if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta <90;
+      //if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 300 && alpha <= 360) {
         images[0].style.display = "block"; shown = "Image1";
       } else if (selectedPosition.leftOfSternum && selectedPosition.thirdIntercostal && beta >= 75 && beta <= 100 && alpha >= 10 && alpha <= 45) {
         images[1].style.display = "block"; shown = "Image2";
